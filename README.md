@@ -5,8 +5,8 @@ checkout automaticamente
 
 Por isso vou mostrar o que você precisa chamar em cada ocasião
 
-Repo do template: https://github.com/deco-sites/abacate, ignore o nome
-Site: https://abacate.deco.site
+Repo do template: https://github.com/deco-sites/abacate, ignore o nome Site:
+https://abacate.deco.site
 
 ## Tópicos
 
@@ -49,6 +49,7 @@ Site: https://abacate.deco.site
   - [O que é um hook?](#_o-que-e-um-hook)
   - [O que é necessário para finalizar uma compra?](#_o-que-e-necessario-para-finalizar-uma-compra)
   - [Por que precisa ter uma página de login?](#_por-que-precisa-ter-uma-pagina-de-login)
+  - [Como redirecionar para o /login se o usuário não estiver logado?](#_como-redirecionar-para-o-login-se-o-usuario-nao-estiver-logado)
 
 ### <a id="_overview-do-template">Overview do template</a>
 
@@ -234,6 +235,24 @@ invoke.wake.actions.login...()
 
 É criado os cookies de login atualizado e o legado, o que permite a API e o my
 account (MyAccount) funcionar
+
+### <a id="_como-redirecionar-para-o-login-se-o-usuario-nao-estiver-logado">Como redirecionar para o /login se o usuário não estiver logado?</a>
+
+```js
+export async function loader(props: object, req: Request, ctx: AppContext) {
+    const isLogged = !!(await ctx.invoke.wake.loaders.user({}, { signal: req.signal }))
+
+    if (!isLogged) {
+        return redirect('/login')
+    }
+
+    return props
+}
+```
+
+Basicamente você precisa passar `{ signal: req.signal }` pra evitar que o async rendering faça esse loader não rodar
+
+Se você não passar isso, esse redirect não funciona
 
 ### Como usar o app
 
