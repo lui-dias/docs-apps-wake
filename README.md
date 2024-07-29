@@ -5,6 +5,9 @@ checkout automaticamente
 
 Por isso vou mostrar o que você precisa chamar em cada ocasião
 
+Repo do template: https://github.com/deco-sites/abacate, ignore o nome
+Site: https://abacate.deco.site
+
 ## Tópicos
 
 - [Overview do template](#_overview-do-template)
@@ -14,7 +17,7 @@ Por isso vou mostrar o que você precisa chamar em cada ocasião
   - [Frete](#page-frete)
   - [Pagamento](#page-pagamento)
   - [Confirmação](#page-confirmacao)
-- [Instalar](#instalar)
+- [Instalar o app customizado](#instalar)
 - [Como usar o app](#como-usar-o-app)
 - [Loaders](#loaders)
   - [checkoutCoupon](#_checkoutCoupon)
@@ -48,6 +51,9 @@ Por isso vou mostrar o que você precisa chamar em cada ocasião
   - [Por que precisa ter uma página de login?](#_por-que-precisa-ter-uma-pagina-de-login)
 
 ### <a id="_overview-do-template">Overview do template</a>
+
+O template tem bugs ainda, as vezes sendo necessário reiniciar a página para
+aparecer a informação correta, mas você consegue finalizar uma compra
 
 <a id="page-carrinho" href="http://localhost:8000/carrinho" style="font-size: 20px; font-weight: 600;">/carrinho</a>
 
@@ -379,6 +385,10 @@ invoke.wake.actions.login({
 ### <a id="_loginGoogle">loginGoogle</a>
 
 - Efetua o login com o Google
+
+O login com o Google não foi muito testado porque só tenho uma conta Google.
+Depois que você loga uma vez e cria a conta no site, você só consegue criar
+outra conta no site com outra conta Google
 
 ```js
 invoke.wake.actions.loginGoogle({
