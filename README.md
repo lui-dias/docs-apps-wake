@@ -146,118 +146,6 @@ automaticamente, apenas a versão do `deco`
 De qualquer forma, isso não deve afetar nada, mas se afetar, me chame que eu atualizo a versão dos
 `apps`
 
-## FAQ
-
-### <a id="_o-que-e-um-loader">O que é um loader?</a>
-
-É uma função que retorna alguma coisa
-
-É basicamente o que o GET é pro REST, ou Query pro GraphQL
-
-### <a id="_o-que-e-uma-action">O que é uma action?</a>
-
-É uma função modifica alguma coisa
-
-É basicamente o que o POST, PUT, DELETE ou PATCH é pro REST, ou Mutation pro GraphQL
-
-### <a id="_o-que-e-um-hook">O que é um hook?</a>
-
-[TLDR](#o-que-e-um-hook-tldr)
-
-Supondo que sua loja tem um minicart, wishlist e um ícone pra ver se o usuário tá logado
-
-Toda vez que você chamar alguma action de adicionar um item ao carrinho, wishlist ou seja lá o que,
-você precisaria atualizar o minicart por exemplo
-
-```js
-cart.value = await invoke.wake.loaders.cart()
-```
-
-E se fosse os 3?
-
-```js
-cart.value = await invoke.wake.loaders.cart()
-user.value = await invoke.wake.loaders.user()
-wishlist.value = await invoke.wake.loaders.wishlist()
-```
-
-O código fica grande e repetitivo
-
-<span id="o-que-e-um-hook-tldr"></span>
-
-Então os hooks, principalmente `useUser`, `useCart` e `useWishlist`, são estados globais que
-retornam signals e actions
-
-A diferenca entre chamar as actions pelos hooks do que chamar pelo `invoke`, é que o hook atualiza o
-signal `cart`, toda vez que `addCart`, ou qualquer **action** de `useCart` é chamado
-
-Com hooks
-
-```js
-const { cart, addItem } = useCart()
-
-await addItem(...)
-console.log(cart.value) // Carrinho com produto adicionado
-```
-
-Sem hooks
-
-```js
-await invoke.wake.actions.cart.addItem(...)
-cart.value = await invoke.wake.loaders.cart()
-console.log(cart.value)
-```
-
-### <a id="_o-que-e-necessario-para-finalizar-uma-compra">O que é necessário para finalizar uma compra?</a>
-
-1. O usuário deve ter pelo menos 1 produto
-2. O usuário deve estar logado e ter um carrinho associado
-3. O usuário deve ter um endereço selecionado
-4. O usuário deve ter um frete selecionado
-5. O usuário deve ter um forma de pagamento selecionada
-
-E se não deu nenhum erro no final da compra, a compra foi feita com sucesso
-
-### <a id="_por-que-precisa-ter-uma-pagina-de-login">Por que precisa ter uma página de login?</a>
-
-A página de login da wake cria um cookie legado que não funciona com a API
-
-Com a página customizada, depois de chamar
-
-```js
-invoke.wake.actions.login...()
-```
-
-É criado os cookies de login atualizado e o legado, o que permite a API e o my account (MyAccount)
-funcionar
-
-### <a id="_como-redirecionar-para-o-login-se-o-usuario-nao-estiver-logado">Como redirecionar para o /login se o usuário não estiver logado?</a>
-
-```js
-export async function loader(props: object, req: Request, ctx: AppContext) {
-    const isLogged = !!(await ctx.invoke.wake.loaders.user({}, { signal: req.signal }))
-
-    if (!isLogged) {
-        return redirect('/login')
-    }
-
-    return props
-}
-```
-
-Basicamente você precisa passar `{ signal: req.signal }` pra evitar que o async rendering faça esse
-loader não rodar
-
-Se você não passar isso, esse redirect não funciona
-
-### <a id="_an_error_has_occured">An error has occured</a>
-
-É um erro genérico da API, aconteceu bastante enquanto fazia o app, nem todos os erros da API da
-wake são tratados, isso pode ser um erro da sua parte como pode ser da parte deles
-
-Precisa ver a query graphql que foi mandada, e se ainda assim parecer ok, precisa ver com os devs da
-wake
-
 ### Como usar o app
 
 Para o checkout funciona direito, vai no app da wake no admin e ativa o `Headless Checkout`, se isso
@@ -570,3 +458,115 @@ invoke.wake.actions.signupPerson({
     'secondaryPhoneNumber': '32423-4312',
 })
 ```
+
+## FAQ
+
+### <a id="_o-que-e-um-loader">O que é um loader?</a>
+
+É uma função que retorna alguma coisa
+
+É basicamente o que o GET é pro REST, ou Query pro GraphQL
+
+### <a id="_o-que-e-uma-action">O que é uma action?</a>
+
+É uma função modifica alguma coisa
+
+É basicamente o que o POST, PUT, DELETE ou PATCH é pro REST, ou Mutation pro GraphQL
+
+### <a id="_o-que-e-um-hook">O que é um hook?</a>
+
+[TLDR](#o-que-e-um-hook-tldr)
+
+Supondo que sua loja tem um minicart, wishlist e um ícone pra ver se o usuário tá logado
+
+Toda vez que você chamar alguma action de adicionar um item ao carrinho, wishlist ou seja lá o que,
+você precisaria atualizar o minicart por exemplo
+
+```js
+cart.value = await invoke.wake.loaders.cart()
+```
+
+E se fosse os 3?
+
+```js
+cart.value = await invoke.wake.loaders.cart()
+user.value = await invoke.wake.loaders.user()
+wishlist.value = await invoke.wake.loaders.wishlist()
+```
+
+O código fica grande e repetitivo
+
+<span id="o-que-e-um-hook-tldr"></span>
+
+Então os hooks, principalmente `useUser`, `useCart` e `useWishlist`, são estados globais que
+retornam signals e actions
+
+A diferenca entre chamar as actions pelos hooks do que chamar pelo `invoke`, é que o hook atualiza o
+signal `cart`, toda vez que `addCart`, ou qualquer **action** de `useCart` é chamado
+
+Com hooks
+
+```js
+const { cart, addItem } = useCart()
+
+await addItem(...)
+console.log(cart.value) // Carrinho com produto adicionado
+```
+
+Sem hooks
+
+```js
+await invoke.wake.actions.cart.addItem(...)
+cart.value = await invoke.wake.loaders.cart()
+console.log(cart.value)
+```
+
+### <a id="_o-que-e-necessario-para-finalizar-uma-compra">O que é necessário para finalizar uma compra?</a>
+
+1. O usuário deve ter pelo menos 1 produto
+2. O usuário deve estar logado e ter um carrinho associado
+3. O usuário deve ter um endereço selecionado
+4. O usuário deve ter um frete selecionado
+5. O usuário deve ter um forma de pagamento selecionada
+
+E se não deu nenhum erro no final da compra, a compra foi feita com sucesso
+
+### <a id="_por-que-precisa-ter-uma-pagina-de-login">Por que precisa ter uma página de login?</a>
+
+A página de login da wake cria um cookie legado que não funciona com a API
+
+Com a página customizada, depois de chamar
+
+```js
+invoke.wake.actions.login...()
+```
+
+É criado os cookies de login atualizado e o legado, o que permite a API e o my account (MyAccount)
+funcionar
+
+### <a id="_como-redirecionar-para-o-login-se-o-usuario-nao-estiver-logado">Como redirecionar para o /login se o usuário não estiver logado?</a>
+
+```js
+export async function loader(props: object, req: Request, ctx: AppContext) {
+    const isLogged = !!(await ctx.invoke.wake.loaders.user({}, { signal: req.signal }))
+
+    if (!isLogged) {
+        return redirect('/login')
+    }
+
+    return props
+}
+```
+
+Basicamente você precisa passar `{ signal: req.signal }` pra evitar que o async rendering faça esse
+loader não rodar
+
+Se você não passar isso, esse redirect não funciona
+
+### <a id="_an_error_has_occured">An error has occured</a>
+
+É um erro genérico da API, aconteceu bastante enquanto fazia o app, nem todos os erros da API da
+wake são tratados, isso pode ser um erro da sua parte como pode ser da parte deles
+
+Precisa ver a query graphql que foi mandada, e se ainda assim parecer ok, precisa ver com os devs da
+wake
