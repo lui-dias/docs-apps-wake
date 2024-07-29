@@ -4,7 +4,7 @@ automaticamente, nem associado ao checkout automaticamente
 
 Por isso vou mostrar o que você precisa chamar em cada ocasião
 
-Repo do template: https://github.com/deco-sites/abacate, ignore o nom
+Repo do template: https://github.com/deco-sites/abacate, ignore o nome
 
 Site: https://abacate.deco.site
 
