@@ -237,8 +237,6 @@ account (MyAccount) funcionar
 
 ### Como usar o app
 
-Leia a [FAQ](#faq) primeiro
-
 Para o checkout funciona direito, vai no app da wake no admin e ativa o
 `Headless Checkout`, se isso não tiver ativado, o app não vai usar o login da
 api headless e sim da `/api/Login/Get`, e o app de checkout vai ficar meio
